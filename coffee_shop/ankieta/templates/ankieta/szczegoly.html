@@ -2,15 +2,19 @@
 {% block title%}Ankieta - szczegóły{% endblock %}
 
 {% block content %}
-<a href="/ankieta/pytania/" class="btn btn-warning" tabindex="-1" role="button"
-    aria-disabled="true">{{pytanie.tekst_pytania}}</a>
+<form action="{% url 'ankieta:glosuj' pytanie.id %}" method="post">
+    {% csrf_token %}
+    <a href="/ankieta/pytania/" class="btn btn-warning" tabindex="-1" role="button"
+        aria-disabled="true">{{pytanie.tekst_pytania}}</a>
 
-<ul>
-    {% for odp in pytanie.odpowiedz_set.all %}
-    <li>
-        {{odp.tekst_wyboru}}
-    </li>
-    {% endfor %}
-</ul>
+    <ul>
+        {% for odp in pytanie.odpowiedz_set.all %}
 
+        <input type="radio" name="wybor" id="wybor{{ forloop.counter }}" value="{{odp.id}}">
+        <label for="wybor{{ forloop.counter }}">{{odp.tekst_wyboru}}</label><br>
+
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Głosuj">
+</form>
 {% endblock %}
