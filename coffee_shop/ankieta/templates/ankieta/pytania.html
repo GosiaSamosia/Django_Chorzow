@@ -1,0 +1,16 @@
+    {% extends "base.html" %}
+    {% block title%}Lista ankiet{% endblock %}
+
+    {% block content %}
+    {% if lista_ostatnich_pytan %}
+    <ul>
+        {% for pytanie in lista_ostatnich_pytan %}
+        <li><a href="/ankieta/pytania/{{pytanie.id}}/">
+                {{pytanie.tekst_pytania}}
+            </a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Nie ma jeszcze ankiet </p>
+    {% endif %}
+    {% endblock %}

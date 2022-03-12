@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title%}Ankieta - szczegóły{% endblock %}
+
+{% block content %}
+<a href="/ankieta/pytania/" class="btn btn-warning" tabindex="-1" role="button"
+    aria-disabled="true">{{pytanie.tekst_pytania}}</a>
+
+<ul>
+    {% for odp in pytanie.odpowiedz_set.all %}
+    <li>
+        {{odp.tekst_wyboru}}
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
