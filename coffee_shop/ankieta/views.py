@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from .models import Pytanie,Glosy
 from django.template import loader
+from django.db.models import Count
 
 # Create your views here.
 def get_client_ip(request):
@@ -34,14 +35,18 @@ def glosuj(request, pytanie_id):
     uzytkownik= get_client_ip(request))          
     return HttpResponseRedirect(f"/ankieta/pytania/{pytanie_id}/wyniki")
 
-def pokaz_rezultat_glosowania(request,pytanie_id):
-    # get_object_or_404(Pytanie,pytanie_id)
-    glosy = Glosy.objects.filter(pytanie_id=pytanie_id)
-    odpowiedzi={}
-    for glos in glosy:
-        if current_value:=odpowiedzi.get(glos.odpowiedz.tekst_wyboru):
-            odpowiedzi[glos.odpowiedz.tekst_wyboru]=current_value+1
-        else:
-           odpowiedzi[glos.odpowiedz.tekst_wyboru]=1
-    return JsonResponse(odpowiedzi)
+# def pokaz_rezultat_glosowania(request,pytanie_id):
+#     # get_object_or_404(Pytanie,pytanie_id)
+#     glosy = Glosy.objects.filter(pytanie_id=pytanie_id)
+#     odpowiedzi={}
+#     for glos in glosy:
+#         if current_value:=odpowiedzi.get(glos.odpowiedz.tekst_wyboru):
+#             odpowiedzi[glos.odpowiedz.tekst_wyboru]=current_value+1
+#         else:
+#            odpowiedzi[glos.odpowiedz.tekst_wyboru]=1
+#     return JsonResponse(odpowiedzi)
 
+def pokaz_rezultat_glosowania(request,pytanie_id):
+    results=Glosy.objects.filter(pytanie_id=pytanie_id).values(
+        'odpowiedz__tekst_wyboru').annotate(Count('odpowiedz_id'))
+    return JsonResponse(list(results),safe=False)
