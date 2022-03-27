@@ -1,0 +1,55 @@
+ {% extends 'base.html' %}
+ {% block title %} strona główna {% endblock%}
+
+ {% block content %}
+ <h1>{{tytul}}</h1>
+
+ {% for recepta in lista_recept %}
+ <h4>{{recepta.pacjent}}</h4>
+
+ <div class="accordion accordion-flush" id="accordionFlushExample">
+     <div class="accordion-item">
+         <h2 class="accordion-header" id="flush-headingOne">
+             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                 data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                 aria-controls="collapse{{ forloop.counter }}">
+                 Pacjent: {{recepta.pacjent}},wystawił: {{recepta.wystawca}} data: {{recepta.data_wystawienia}}
+             </button>
+         </h2>
+         <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+             aria-labelledby="collapse{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
+             <div class="accordion-body">
+                 <table class="table">
+                     <thead>
+                         <tr>
+                             <th scope="col">#</th>
+                             <th scope="col">Nazwa leku</th>
+                             <th scope="col">Dawkowanie</th>
+                             <th scope="col">Odpłatność</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         {% for szcz in recepta.przepisane_leki_set.all %}
+                         <tr>
+                             <th scope="row">{{forloop.counter}}</th>
+                             <td>{{szcz.nazwa_leku}}</td>
+                             <td>{{szcz.dawkowanie}}</td>
+                             <td>{{szcz.odplatnosc}}</td>
+                         </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+
+     </div>
+
+
+
+
+
+
+
+     {% endfor %}
+
+     {% endblock %}
